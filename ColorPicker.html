@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>DOM Color Tweaker</title>
+	<style>
+		body {
+			font-family:"Trebuchet MS", Segoe, sans-serif;
+			margin:40px;
+			font-size: 1.2em;
+            background-color: beige;
+		}
+		div:first-child {
+			margin-bottom: 20px;
+		}
+		button {
+			padding: 10px;
+		}
+		.inbox {
+			width: 30px;
+			height: 38px;
+			margin-left: 30px;
+		}
+        colorbox{
+            position: absolute;
+            width: 300px;
+            height: 100px;
+            border-style: solid;
+            border-width: thin;
+            border-color: black;
+            background-color: beige;
+        }
+        rpos{
+            position: absolute;
+            left: 50px;
+
+        }
+        gpos{
+            position: absolute;
+            left: 110px;
+
+        }
+        bpos{
+            position: absolute;
+            left: 200px;
+
+        }
+        resetpos{
+            position: absolute;
+            left: 250px;
+        }
+	
+	</style>
+</head>
+<body>
+    <div>
+        CSS: Color Displayer
+    </div>
+	<div>
+		Select a number from 0 to 255 for each color value:
+	</div>
+	
+
+        <rpos>Red</rpos><gpos>Green</gpos><bpos>Blue</bpos>
+
+
+    <br \>
+    <br \>
+    <input type= "text" class="inbox" id="box" value="180">
+    
+
+    <input type= "text" class="inbox" id="box1" value="90">
+
+
+    <input type= "text" class="inbox" id="box2" value="0">
+
+    	<button id="btn">Show me the color!</button>
+	<br \>
+    <resetpos>
+    <button id="btn2">Reset colors</button></resetpos>
+    <br \>
+      <br \>
+    <colorbox id="outbox">
+    &nbsp;
+    </colorbox>
+	<script>
+		
+	let btn = document.getElementById("btn");
+    let btn2 = document.getElementById("btn2");
+	let redbox = document.getElementById("box");
+    let greenbox = document.getElementById("box1");
+    let bluebox = document.getElementById("box2");
+    let outbox = document.getElementById("outbox");
+	let colorRed = 180;    // initialize colors to a brown
+    let colorGreen = 90;
+    let colorBlue = 0;
+    let reset = 0;
+
+	btn.addEventListener("click", clickHandler, false);
+    btn2.addEventListener("click", clickHandler2, false);
+		
+	function clickHandler() {
+
+        
+		colorRed = redbox.value;
+        colorGreen = greenbox.value;
+        colorBlue = bluebox.value;
+        if(isNaN(colorRed)|isNaN(colorBlue)|isNaN(colorGreen)){
+           alert("Please enter a number");
+            reset = 1;  //If entry is invalid, set reset variable to trigger a reset
+           }
+        if((colorRed > 255)|(colorGreen > 255)|(colorBlue > 255)|(colorRed < 0)|(colorGreen < 0)|(colorBlue < 0)){
+           reset = 1;
+            alert("Please make sure your value is between 0 and 255");
+           }
+        if(reset == 1){
+            redbox.value = 180;
+            greenbox.value = 90;
+            bluebox.value = 0;
+            colorRed = redbox.value;
+            colorGreen = greenbox.value;
+            colorBlue = bluebox.value;
+            reset = 0;
+        }
+        
+        outbox.style.backgroundColor = "rgb(" + (colorRed) + ", " + (colorGreen) + ", " + (colorBlue) + ")";
+
+	}
+        function clickHandler2(){
+            redbox.value = 180;
+            greenbox.value = 90;
+            bluebox.value = 0;
+            colorRed = redbox.value;
+            colorGreen = greenbox.value;
+            colorBlue = bluebox.value;
+            outbox.style.backgroundColor = "rgb(" + (colorRed) + ", " + (colorGreen) + ", " + (colorBlue) + ")";
+        }
+		
+	</script>
+</body>
+</html>
