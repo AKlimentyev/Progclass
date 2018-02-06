@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Exercise 6</title>
+
+    <style>
+        #planetname{
+            color: red;
+        }
+    </style>
+   
+    </head>
+
+<body>
+
+<div id="main">
+
+</div> 
+
+<script>
+var planetNames = ["Jupiter", "Venus", "Saturn", "Mars", "Zimba"];
+var distancesFromEarth = [5.2, 0.72, 9.5, 1.5, 1.3];
+var sunnyInAugust = [false, true, false, true, false];
+var output = ""; //combined output
+
+    for(var i = 0; i < planetNames.length; i++)
+{
+  output += "<div id=planetname>" + planetNames[i] + "<br \></div>";
+
+  output += distancesFromEarth[i] + "<br \>";
+
+  if(sunnyInAugust[i] == true){ //check if sunny or not
+      output += "true<br \>";
+  }
+    else{
+        output += "false<br \>";
+    }
+    
+
+  output += "----------" + "<br \>";
+
+}
+
+  document.getElementById("main").innerHTML=output;  //output combined output
+
+</script>
+
+</body>
+</html>
