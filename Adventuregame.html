@@ -1,0 +1,385 @@
+<doctype html>
+<head>
+    
+    
+    <style>
+        #wintext{
+            color: red;
+            
+        }
+        #actionout{
+            font-weight: bolder;
+        }
+     
+    </style>
+    
+    
+    
+    
+    
+    </head>
+    
+    
+<!--
+                Sec   Bridge
+    Arivals -> Main hall -> Escape
+                
+                Engineering Medbay
+    -->
+    
+    
+    
+<body>
+<script> 
+    
+var glocked = 0;
+    var finished = 0;
+    var locations = {
+    bridge: {
+		name:"the Bridge",
+		description:{2:"This fancy room has a number of broken consoles, except for one labeled COMMUNICATIONS",
+                    1:"This fancy room has a number of broken consoles, except for one labeled COMMUNICATIONS, which is currently flashing EMERGENCY SHUTTLE CALLED.",
+                    },
+        locked:2,
+        locid:"bridge",
+		illustrated:{
+			file:"bridge.png",
+		},
+        Exits:{
+			south:"main_hall",
+        },
+	},
+	arrivals: {
+		name:"Arrivals",
+		description:{0:"This room has a docking port for incoming shuttles. There is a hallway leading east."},
+        locked:0,
+        locid:"arrivals",
+		illustrated:{
+			file:"arrivals.png",
+		},
+        Exits:{
+			east:"main_hall",
+        },
+	},
+	security: {
+		name:"Security",
+		description:{0:"The walls of the security wing are covered in splotches of blood.",
+                    1:"The walls of the security wing are covered in splotches of blood. You spy a key sitting on a desk. ",
+                    2:"The door of the security wing angrily beeps as you approach it. It appears to be locked.",},
+        locked:2,
+        locid:"security",
+		illustrated:{
+			file:"security.png",
+		},
+		Exits:{
+			south:"escape",
+        },
+	},
+	medbay: {
+		name:"Medbay",
+        locked:2,
+		description:{2:"This white room looks like it was just cleaned yesterday. You spy something shining in a damaged locker.",
+                     1:"This white room looks like it was just cleaned yesterday. The damaged locker is open. There is an ID sitting inside.",
+                     0:"This white room looks like it was just cleaned yesterday. The damaged locker is open.",
+                    },
+        locid:"medbay",
+		illustrated:{
+			file:"medbay.png",
+		},
+        Exits:{
+			north:"escape",
+        },
+	},
+	main_hall: {
+		name:"the Main Hall",
+        locked:0,
+        locid:"main_hall",
+		description:{0:"The empty hallway echoes with your steps. To the north, you see a sign labeled BRIDGE. TO the west, ARRIVALS. To the south, ENGINEERING. TO the east, ESCAPE.",
+                    },
+		illustrated:{
+			file:"main_hall.png",
+		},
+        Exits:{
+			south:"engineering",
+            east:"escape",
+            north:"bridge",
+            west:"arrivals",
+        },
+	},
+	engineering: {
+		name:"Engineering",
+        locked:1,
+        locid:"engineering",
+		description:{1:"A deep hum permeates this department, with the occasional crackling of a geiger counter adding to the ambience. There is a crowbar resting in an open locker.",
+                     0:"A deep hum permeates this department, with the occasional crackling of a geiger counter adding to the ambience.",
+    },
+		illustrated:{
+			file:"engineering.png",
+		},
+        Exits:{
+			north:"main_hall",
+        },
+	},
+	escape:{
+		name:"the Escape Wing",
+        locid:"escape",
+		description:{0:"A large room with airlocks labeled ESCAPE SHUTTLE covering the east side",},
+        locked:0,
+		illustrated:{
+            file:"escape.png",
+		},
+        Exits:{
+			south:"medbay",
+            west:"main_hall",
+            north:"security",
+            east:"shuttle",
+        },
+	},
+    shuttle:{
+        locid:"shuttle",
+		name:"the Escape shuttle",
+		description:{0:"A large shuttle that blasts off as you board.",
+                    1:"Space. The Final Frontier",},
+        locked:1,
+		illustrated:{
+			file:"shuttle.png",
+		},
+        Exits:{
+            west:"escape", 
+        },
+	},
+}
+var curloc = locations.arrivals;
+
+
+
+var objects = {
+	key:{
+		name:"Communications key",
+        location:"Security",
+        useloc:"bridge",
+        itemID:1,
+        newitemID:8,
+		
+	},
+	id:{
+		name:"ID Card",
+        location:"Medbay",
+		useloc:"security",
+        usetext:"You swipe the ID card on the airlock, opening it.",
+        itemID:2,
+        newitemID:1,
+	},
+	crowbar:{
+		name:"Crowbar",
+        location:"Engineering",
+        useloc:"medbay",
+        usetext:"You pry the locker open.",
+        itemID:4,
+        newitemID:2,
+	},
+};
+
+   
+var gameout;  
+var actionout;
+var current_items = 0;
+window.addEventListener("load",init);
+
+function init(){
+    curloc = locations.arrivals;
+    if(typeof(Storage)!=="undefined"){
+        loadInfo()
+        if(!curloc){
+            localStorage.clear();
+            curloc = locations.arrivals;
+        }
+        let imgt=document.getElementById("imgid");
+        imgt.src=curloc.illustrated.file;
+    }
+	
+    window.addEventListener("keydown", keydownHandler, false);
+    var button=document.getElementById("sub");
+	button.addEventListener("click",runcommand);
+    var sbutton=document.getElementById("save");
+	sbutton.addEventListener("click",saveInfo);
+    var rbutton=document.getElementById("reset");
+	rbutton.addEventListener("click",clearInfo);
+    gameout = document.getElementById("gameout");
+    actionout = document.getElementById("actionout");
+    gameout.innerHTML="You are in "+curloc.name+": "+curloc.description[curloc.locked];
+
+}
+
+
+    
+
+
+function keydownHandler( event ) {
+    if (event.keyCode === 13) {
+        runcommand();
+        //console.log( "The ENTER key was pressed");
+    }
+} 
+    
+    
+    
+    
+    function runcommand(){
+	var commandin=document.getElementById("cin").value;
+    commandin = commandin.toLowerCase();
+	var parsedcom = commandin.split(" ");
+    
+    
+    if(finished == 1){
+        current_items = 0;
+        localStorage.clear();
+        location.reload();
+    }
+        
+        
+        if(parsedcom[0] == "go"){
+        
+        let exit = curloc.Exits;
+        
+        if(exit[parsedcom[1]]){//check to see if the 
+            curloc = locations[exit[parsedcom[1]]];
+            glocked=curloc.locked;
+            //console.log(curloc.name);
+            //console.log(curloc.locked);
+            //console.log(current_items);
+            var imgt=document.getElementById("imgid");
+            imgt.src=curloc.illustrated.file;
+            
+            
+            
+            if(curloc.locid == "shuttle"){//special handling for the escape shuttle
+                if(curloc.locked == 1)
+                    {
+                        let gameout = document.getElementById("gameout");
+                        gameout.innerHTML= "<div id=wintext>You escaped the station!</div>";
+                        finished = 1;
+                        localStorage.clear();
+                    }
+                else{
+                    let gameout = document.getElementById("gameout");
+                    gameout.innerHTML= "You walked out the airlock into space and suffocated. Try again.";
+                    finished = 1;
+                    localStorage.clear();
+                
+                }
+                return;
+            }
+            
+            
+            
+            let gameout = document.getElementById("gameout");
+            gameout.innerHTML="You are in "+curloc.name+": "+curloc.description[curloc.locked];
+            actionout.innerHTML = "";
+        
+        }
+        
+        
+    }
+
+    else if(parsedcom[0] == "take"){
+        //console.log("take");
+        //console.log(parsedcom[1]);
+        //console.log(glocked);
+        var item = objects;
+        if(item[parsedcom[1]]){
+            item = objects[parsedcom[1]];
+            
+            
+            if((item.location != curloc.name) || (curloc.locked != 1)){//return if state is invalid
+                //console.log("returned");
+                return;
+            }
+            if(!(current_items&item.itemID) || !current_items){//only add the item if we don't have it.
+                //console.log("grabbed");
+                current_items += item.itemID;   //Since we don't save the status of every room, allow for the item to be gotten again, but not actually change the stored items.
+            }
+                actionout.innerHTML = "You take the "+item.name;
+                curloc.locked--;
+                if(curloc.description[curloc.locked]=="SKIP"){
+                    curloc.locked = 0;
+                }
+                glocked = curloc.locked;
+                gameout.innerHTML="You are in "+curloc.name+": "+curloc.description[curloc.locked];
+  
+        }
+        
+                
+    }
+        else if(parsedcom[0]=="use"){
+            //console.log("use");
+            var item = objects;
+            if(item[parsedcom[1]]){
+                item = objects[parsedcom[1]];
+
+                if(current_items&item.itemID && item.useloc == curloc.locid && curloc.locked == 2){//only use the item if we have it, it's the right spot 
+                    //console.log("USed");
+                    actionout.innerHTML = item.usetext;
+                    curloc.locked--;
+                    glocked = curloc.locked;
+                    if(curloc == locations.bridge){
+                        locations.shuttle.locked = 0;
+                    }
+                    gameout.innerHTML="You are in "+curloc.name+": "+curloc.description[curloc.locked];
+                }
+            }
+        } 
+    }
+    
+	
+function saveInfo(){
+	var saveloc=curloc;
+	var items=current_items;
+	
+	localStorage.setItem("location",curloc.locid);
+	localStorage.setItem("items",current_items);
+}
+        
+    
+
+
+function loadInfo(){
+    //console.log("load");
+	curloc = locations[localStorage.getItem("location")];
+	current_items = parseInt(localStorage.getItem("items"));
+    if(isNaN(current_items)){//error checking
+        current_items = 0;
+    }
+    //console.log(curloc);
+    //console.log(current_items);
+}   
+    
+function clearInfo(){
+    localStorage.clear();
+    location.reload();
+}
+    
+    </script>
+
+
+    
+    <div id="imgdiv"><img id="imgid" src="arrivals.png"></div>
+    
+    
+    <div id="gameout"></div>
+    <div id="actionout"></div>
+<form>
+    
+
+    <label for="cin"> Commands:</label> 
+    <input id="cin" type="text" />
+    <div><input type="button" id="sub" value="Submit"></div>
+    <div><input type="button" id="save" value="Save"></div>
+    <div><input type="button" id="reset" value="Restart"></div>
+    
+    </form>
+
+
+
+
+</body>
