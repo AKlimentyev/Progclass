@@ -158,6 +158,7 @@ var objects = {
 		name:"Communications key",
         location:"Security",
         useloc:"bridge",
+        usetext:"You insert the key and call the shuttle.",
         itemID:1,
         newitemID:8,
 		
@@ -198,7 +199,6 @@ function init(){
         imgt.src=curloc.illustrated.file;
     }
 	
-    window.addEventListener("keydown", keydownHandler, false);
     var button=document.getElementById("sub");
 	button.addEventListener("click",runcommand);
     var sbutton=document.getElementById("save");
@@ -215,12 +215,13 @@ function init(){
     
 
 
-function keydownHandler( event ) {
-    if (event.keyCode === 13) {
+function handleEnter(){  
+    if(window.event && window.event.keyCode == 13){      
         runcommand();
-        //console.log( "The ENTER key was pressed");
-    }
-} 
+        return false;
+    }   
+    return true;   
+}
     
     
     
@@ -254,7 +255,7 @@ function keydownHandler( event ) {
             
             
             if(curloc.locid == "shuttle"){//special handling for the escape shuttle
-                if(curloc.locked == 1)
+                if(curloc.locked == 0)
                     {
                         let gameout = document.getElementById("gameout");
                         gameout.innerHTML= "<div id=wintext>You escaped the station!</div>";
@@ -372,7 +373,7 @@ function clearInfo(){
     
 
     <label for="cin"> Commands:</label> 
-    <input id="cin" type="text" />
+    <input id="cin" type="text" onkeypress="return handleEnter()"/>
     <div><input type="button" id="sub" value="Submit"></div>
     <div><input type="button" id="save" value="Save"></div>
     <div><input type="button" id="reset" value="Restart"></div>
