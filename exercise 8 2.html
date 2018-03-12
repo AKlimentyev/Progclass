@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>One Way</title>
+
+    
+</head>
+<body>
+    
+
+
+    <canvas id="canvas" width="500" height="500">
+        <!-- Insert fallback content here -->
+    </canvas>
+    
+
+    <script>
+    	var canvas = document.querySelector("#canvas");
+    	var ctx = canvas.getContext("2d");
+		ctx.lineJoin = "round";
+		
+        
+        ctx.moveTo(60,60); //Rectangle
+        ctx.lineTo(160, 60);
+        ctx.lineTo(160, 165);
+        ctx.lineTo(60, 165);
+        ctx.lineTo(60, 60);
+        
+        ctx.fillStyle = "blue";
+        
+        ctx.fill(); //End Rectangle
+ 
+
+        
+        ctx.moveTo(65,65);//White outline
+        ctx.lineTo(155, 65);
+        ctx.lineTo(155, 160);
+        ctx.lineTo(65, 160);
+        ctx.lineTo(65, 65);
+        
+        ctx.strokeStyle = "white";
+        ctx.lineWidth = 3;
+        ctx.stroke();//End Outline
+        
+        ctx.lineWidth = 0;
+        ctx.beginPath(); //Arrow
+        ctx.moveTo(100,150);
+		ctx.lineTo(100, 100);
+        ctx.lineTo(90, 100);
+        ctx.lineTo(105, 90);
+        ctx.lineTo(120, 100);
+        ctx.lineTo(110, 100);
+
+		ctx.lineTo(110, 150);
+        ctx.closePath(); 
+        
+        ctx.fillStyle = "white";
+        ctx.fill();
+        ctx.stroke();//End Arrow
+        ctx.fillStyle = "blue";
+        ctx.font = "30px Arial";
+        
+        ctx.fillText("One Way",50,200);
+        
+
+    </script>
+    
+    
+    
+</body>
+</html>

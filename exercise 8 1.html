@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Do Not Enter</title>
+
+    
+</head>
+<body>
+    
+
+
+    <canvas id="canvas" width="500" height="500">
+        <!-- Insert fallback content here -->
+    </canvas>
+    
+
+    <script>
+    	var canvas = document.querySelector("#canvas");
+    	var ctx = canvas.getContext("2d");
+		ctx.lineJoin = "round";
+		
+        ctx.arc(100, 100, 100, 0, 2 * Math.PI, false) /*Makes a circle*/
+
+		ctx.fillStyle = "red";
+        ctx.fill();
+        ctx.fillStyle = "white"; /*Switch Color*/
+        ctx.fillRect(50,90,100,20);
+        ctx.font = "30px Arial";
+        ctx.fillText("DO NOT",45,60); /*Text*/
+        ctx.fillText("ENTER",49,150);
+        
+        
+        
+
+    </script>
+    
+    
+    
+</body>
+</html>
