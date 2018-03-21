@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Tile Game</title>
+
+
+ <style>
+     p{
+         font-family: "Courier New", Courier, monospace;
+     }
+     
+     #introscreen{
+         background-color: teal;
+         position: absolute;
+         width: 512px;
+         height: 512px;
+         display: block;
+     }
+    #gamescreen{
+         background-color: purple;
+         position: absolute;
+         display: none;
+     }
+     .tile{
+         width: 64px;
+         height:64px;
+         position: absolute;
+
+     }
+     .tiletest{
+         position: absolute;
+
+     }
+     .lava{
+         width: 64px;
+         height:64px;
+         position: absolute;
+         background-image: url(./img/lavabig.png);
+     }
+     .stairs{
+         width: 64px;
+         height:64px;
+         position: absolute;
+         background-image: url(./img/stairsbig.png);
+     }
+     outd{
+         font-family: "Courier New", Courier, monospace;
+         font-size: 20px;
+         position: absolute;
+     }
+    
+    
+    </style>   
+    
+ <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js">
+</script>   
+    
+    
+    </head>
+
+<body>
+	<section id="introscreen">
+
+        <h1 id="title">Miner Mayhem</h1>
+        
+        <p>Start the game!</p><br>
+        Instructions: Use the arrow keys to move. Reach the exit.<br>
+        Grab gold, Avoid the Monster and lava.<br>
+        <button id="start">Play</button>
+	</section>
+
+
+  <div id="gamescreen"></div>
+    <outd id="output"></outd>
+    <outd id="stats"></outd>
+
+<audio id="audelem">
+  <source src="gameaudio.ogg" type="audio/ogg">
+  Your browser does not support the audio element.
+</audio>
+
+		<script src="game.js">
+            
+
+    
+/*
+DONE 1. Your own theme for the game. You will want to choose your own genre for the game (outer space adventure, cave adventure, trying to shop at Target adventure... Whatever theme you wish to use).
+
+DONE 2. You will need to use your own images including background image, hero,villain, and other icons. You may create your own images, or use icons you gather from the internet. Please give yourself a time for this. You don't want to be gathering all these images on the day the project is due. There are multiple places for free open source icons and images on the web. You may want to start with: http://www.iconarchive.com/ (Links to an external site.)Links to an external site.
+
+DONE 3. The game board should be at least 8 tiles x 8 tiles. In the example game it is 6x6.
+
+DONE 4. As with the example have a few "good" places to land (the islands in the game example) and have a few bad places to land (the pirates in the game example).
+
+DONE 6. Code the game so it works with object literals rather than all global variables or global arrays. 
+
+DONE 7. Add three aspects of EcmaScript 6. At the most basic it can be let, const, and template literal. Get more complex than that if you want.
+
+DONE 8. Add audio. There should be at least one audio file that plays during the game. This may be at the end when the player successfully makes it home. You may add multiple audio files. You will want to reference chapters 3 & 4 of our text book for adding audio. Adding audio is also described in module 4 in this Canvas site.
+
+DONE 9. Add jQuery and at least one jQuery method. It doesn't have to be super complex. You can even just use jQuery to animate the start screen. You are free to experiment using it in your game too. 
+
+DONE 10. The "monster" will need to appear to be chasing the character (as in the game example)
+
+DONE 11. The player should be able to use keyboard events to move their character.
+
+DONE 12. Have a "Start" screen. This can be a place that will explain the directions. When the player presses a start button then it will show them the game map and they can begin playing. Keep in mind that this can be a div that hides and shows. 
+
+DONE 13.  You will need to modify the output text and fonts to match the theme of your game.
+
+14. Add your own comments explaining your understanding for how the code is working.
+
+
+
+
+
+*/
+    
+    
+    
+</script>
+</body>
+</html>
